@@ -43,6 +43,7 @@ func (eg EXIFGroup) Group() (map[string][]os.FileInfo, error) {
 			continue
 		}
 		key := strings.ReplaceAll(tag.String(), "/", "|")
+		key = strings.ReplaceAll(key, "\"", "")
 		mapping[key] = append(mapping[key], fi)
 	}
 	return mapping, nil
