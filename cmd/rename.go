@@ -23,11 +23,13 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var prefix string
+
 // renameCmd represents the rename command
 var renameCmd = &cobra.Command{
 	Use:   "rename",
-	Short: "Automatically rename multiple files",
-	Long:  `Badumtishhh`,
+	Short: "rename multiple files",
+	Long:  `tap rename [folder] --by [size] --prefix[whatever]`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a path argument")
@@ -49,8 +51,8 @@ var renameCmd = &cobra.Command{
 	},
 	Run: func(cmd *cobra.Command, args []string) {
 		rn := file.NewRenamer(file.Operation{})
-		rn.Load(args[0])
-		rn.Rename()
+		rn.Load(args[0], by)
+		rn.Rename(prefix)
 	},
 }
 
@@ -62,6 +64,9 @@ func init() {
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
 	// renameCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	renameCmd.Flags().StringVar(&by, "by", "size", "file will be assigned to folder base on this flag")
+	renameCmd.Flags().StringVar(&prefix, "prefix", "file", "prefix of the file")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:

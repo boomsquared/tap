@@ -25,7 +25,7 @@ func NewAssigner(fo FileOp) *Assigner {
 }
 
 //Load files from path
-func (g *Assigner) Load(path string, by string) error {
+func (g *Assigner) Load(path, by string) error {
 	fis, err := ioutil.ReadDir(path)
 	if err != nil || len(fis) == 0 {
 		return errors.Wrap(err, "unable to read from path")

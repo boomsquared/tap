@@ -25,24 +25,30 @@ func NewRenamer(fo FileOp) *Renamer {
 }
 
 //Load files info
-func (r *Renamer) Load(path string) error {
+func (r *Renamer) Load(path, by string) error {
 	fis, err := r.fileOp.ReadDir(path)
 	if err != nil {
 		return errors.Wrap(err, "unable to read from path")
 	}
-	objs := filesort.NewSizeSort(fis)
+	var objs filesort.FileSort
+	switch by {
+	case "size":
+		objs = filesort.NewSizeSort(fis)
+	default:
+		objs = filesort.NewSizeSort(fis)
+	}
+
 	r.objects = objs
 	r.basePath = path
 	return nil
 
 }
-
-func (r *Renamer) generateName(i int) string {
-	return path.Join(r.basePath, fmt.Sprintf("file-%d", i))
+func (r *Renamer) generateName(i int, prefix string) string {
+	return path.Join(r.basePath, fmt.Sprintf("%s-%d", prefix, i+1))
 }
 
 //Rename file according to sort
-func (r *Renamer) Rename() error {
+func (r *Renamer) Rename(prefix string) error {
 	sort.Sort(r.objects)
 	for i := 0; i < r.objects.Len(); i++ {
 		fname := r.objects.Iterate()[i].Name()
@@ -50,9 +56,9 @@ func (r *Renamer) Rename() error {
 		p := strings.Split(fname, ".")
 		dst := ""
 		if len(p) > 1 {
-			dst = fmt.Sprintf("%s.%s", r.generateName(i), p[len(p)-1])
+			dst = fmt.Sprintf("%s.%s", r.generateName(i, prefix), p[len(p)-1])
 		} else {
-			dst = r.generateName(i)
+			dst = r.generateName(i, prefix)
 		}
 		err := r.fileOp.Rename(src, dst)
 		if err != nil {
