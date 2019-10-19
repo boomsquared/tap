@@ -32,18 +32,21 @@ func (g *Assigner) Load(path string, by string) error {
 	}
 	var objs group.Grouper
 	switch by {
+	case "device":
+		objs = group.NewEXIFGroup(fis, path, exif.Model)
 	case "extension":
 		objs = group.NewExtensionGroup(fis)
 	case "fnumber":
 		objs = group.NewEXIFGroup(fis, path, exif.FNumber)
-	case "lens":
-		objs = group.NewEXIFGroup(fis, path, exif.LensModel)
-	case "device":
-		objs = group.NewEXIFGroup(fis, path, exif.Model)
-	case "shutterspeed":
-		objs = group.NewEXIFGroup(fis, path, exif.ShutterSpeedValue)
 	case "iso":
 		objs = group.NewEXIFGroup(fis, path, exif.ISOSpeedRatings)
+	case "lens":
+		objs = group.NewEXIFGroup(fis, path, exif.LensModel)
+	case "shutterspeed":
+		objs = group.NewEXIFGroup(fis, path, exif.ShutterSpeedValue)
+
+	default:
+		objs = group.NewEXIFGroup(fis, path, exif.Model)
 	}
 	g.objects = objs
 	g.basePath = path
