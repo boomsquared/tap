@@ -28,89 +28,8 @@ var by string
 // groupCmd represents the group command
 var groupCmd = &cobra.Command{
 	Use:   "group",
-	Short: "Automatically group files to directory",
-	Long: `group -by flags
-		ImageWidth
-		ImageLength
-		BitsPerSample
-		Compression
-		PhotometricInterpretation
-		Orientation
-		SamplesPerPixel
-		PlanarConfiguration
-		YCbCrSubSampling
-		YCbCrPositioning
-		XResolution
-		YResolution
-		ResolutionUnit
-		DateTime
-		ImageDescription
-		Make
-		Model
-		Software
-		Artist
-		Copyright
-		ExifIFDPointer
-		GPSInfoIFDPointer
-		InteroperabilityIFDPointer
-		ExifVersion
-		FlashpixVersion
-		ColorSpace
-		ComponentsConfiguration
-		CompressedBitsPerPixel
-		PixelXDimension
-		PixelYDimension
-		MakerNote
-		UserComment
-		RelatedSoundFile
-		DateTimeOriginal
-		DateTimeDigitized
-		SubSecTime
-		SubSecTimeOriginal
-		SubSecTimeDigitized
-		ImageUniqueID
-		ExposureTime
-		FNumber
-		ExposureProgram
-		SpectralSensitivity
-		ISOSpeedRatings
-		OECF
-		ShutterSpeedValue
-		ApertureValue
-		BrightnessValue
-		ExposureBiasValue
-		MaxApertureValue
-		SubjectDistance
-		MeteringMode
-		LightSource
-		Flash
-		FocalLength
-		SubjectArea
-		FlashEnergy
-		SpatialFrequencyResponse
-		FocalPlaneXResolution
-		FocalPlaneYResolution
-		FocalPlaneResolutionUnit
-		SubjectLocation
-		ExposureIndex
-		SensingMethod
-		FileSource
-		SceneType
-		CFAPattern
-		CustomRendered
-		ExposureMode
-		WhiteBalance
-		DigitalZoomRatio
-		FocalLengthIn35mmFilm
-		SceneCaptureType
-		GainControl
-		Contrast
-		Saturation
-		Sharpness
-		DeviceSettingDescription
-		SubjectDistanceRange
-		LensMake
-		LensModel`,
+	Short: "automatically group files to directory",
+	Long:  `tap group [folder] --by [device,extension,fnumber,iso,lens,shutterspeed]`,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) < 1 {
 			return errors.New("requires a path argument")
@@ -150,7 +69,7 @@ func init() {
 	// and all subcommands, e.g.:
 	// groupCmd.PersistentFlags().String("foo", "", "A help for foo")
 
-	groupCmd.Flags().StringVar(&by, "by", "model", "file will be assigned to folder base on this flag")
+	groupCmd.Flags().StringVar(&by, "by", "camera", "file will be assigned to folder base on this flag")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
