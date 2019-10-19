@@ -30,8 +30,21 @@ func (g *Assigner) Load(path string, by string) error {
 	if err != nil || len(fis) == 0 {
 		return errors.Wrap(err, "unable to read from path")
 	}
-	exifFN := exif.FieldName(by)
-	objs := group.NewEXIFGroup(fis, path, exifFN)
+	var objs group.Grouper
+	switch by {
+	case "extension":
+		objs = group.NewExtensionGroup(fis)
+	case "fnumber":
+		objs = group.NewEXIFGroup(fis, path, exif.FNumber)
+	case "lens":
+		objs = group.NewEXIFGroup(fis, path, exif.LensModel)
+	case "device":
+		objs = group.NewEXIFGroup(fis, path, exif.Model)
+	case "shutterspeed":
+		objs = group.NewEXIFGroup(fis, path, exif.ShutterSpeedValue)
+	case "iso":
+		objs = group.NewEXIFGroup(fis, path, exif.ISOSpeedRatings)
+	}
 	g.objects = objs
 	g.basePath = path
 	return nil

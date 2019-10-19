@@ -1,7 +1,6 @@
 package group
 
 import (
-	"fmt"
 	"os"
 	"path"
 	"strings"
@@ -34,18 +33,16 @@ func (eg EXIFGroup) Group() (map[string][]os.FileInfo, error) {
 			continue
 		}
 		fPath := path.Join(eg.BasePath, fi.Name())
-		fmt.Println("fPath ", fPath)
 		x, err := getEXIF(fPath)
 		if err != nil {
 			continue
 			// return nil, errors.Wrap(err, "unable to extract EXIF")
 		}
-		fmt.Println("BY ", eg.By)
 		tag, err := x.Get(eg.By)
 		if err != nil {
 			continue
 		}
-		key := strings.ReplaceAll(tag.String(), "\"", "")
+		key := strings.ReplaceAll(tag.String(), "/", "|")
 		mapping[key] = append(mapping[key], fi)
 	}
 	return mapping, nil

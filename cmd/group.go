@@ -17,7 +17,6 @@ package cmd
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/boomsquared/tap/pkg/file"
@@ -132,13 +131,12 @@ var groupCmd = &cobra.Command{
 
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("BY: ", by)
 		an := file.NewAssigner(file.Operation{})
 		if err := an.Load(args[0], by); err != nil {
-			fmt.Println(err)
+			panic(err)
 		}
 		if err := an.Assign(); err != nil {
-			fmt.Println(err)
+			panic(err)
 		}
 	},
 }
