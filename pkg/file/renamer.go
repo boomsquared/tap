@@ -2,8 +2,6 @@ package file
 
 import (
 	"fmt"
-	"io/ioutil"
-	"os"
 	"path"
 	"sort"
 	"strings"
@@ -16,16 +14,19 @@ import (
 type Renamer struct {
 	objects  filesort.FileSort
 	basePath string
+	fileOp   FileOp
 }
 
 //NewRenamer returns a new file renamer object
-func NewRenamer() *Renamer {
-	return &Renamer{}
+func NewRenamer(fo FileOp) *Renamer {
+	return &Renamer{
+		fileOp: fo,
+	}
 }
 
-//Load files
+//Load files info
 func (r *Renamer) Load(path string) error {
-	fis, err := ioutil.ReadDir(path)
+	fis, err := r.fileOp.ReadDir(path)
 	if err != nil {
 		return errors.Wrap(err, "unable to read from path")
 	}
@@ -53,7 +54,7 @@ func (r *Renamer) Rename() error {
 		} else {
 			dst = r.generateName(i)
 		}
-		err := os.Rename(src, dst)
+		err := r.fileOp.Rename(src, dst)
 		if err != nil {
 			return errors.Wrap(err, "unable to rename files")
 		}

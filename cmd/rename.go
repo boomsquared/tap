@@ -48,7 +48,7 @@ var renameCmd = &cobra.Command{
 
 	},
 	Run: func(cmd *cobra.Command, args []string) {
-		rn := file.NewRenamer()
+		rn := file.NewRenamer(file.Operation{})
 		rn.Load(args[0])
 		rn.Rename()
 	},
